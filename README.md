@@ -57,3 +57,15 @@ Create the following views which will be needed later on. You don't have to add 
 * A device overview page. You can just leave this empty for the moment.
 
 You can add some basic navigation for the moment as was shown in the YouTube video.
+
+## Add Authentication
+
+Follow this guide to add authentication: [https://github.com/BioBoost/mobile-apps-authentication-demo](https://github.com/BioBoost/mobile-apps-authentication-demo)
+
+## Claiming and Releasing devices
+
+Allow the user to claim a device or release a device.
+
+## User Device overview
+
+A user should be able to view only his/her devices.
