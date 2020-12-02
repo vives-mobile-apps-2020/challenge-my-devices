@@ -62,10 +62,294 @@ You can add some basic navigation for the moment as was shown in the YouTube vid
 
 Follow this guide to add authentication: [https://github.com/BioBoost/mobile-apps-authentication-demo](https://github.com/BioBoost/mobile-apps-authentication-demo)
 
-## Claiming and Releasing devices
+## Claiming Devices
 
-Allow the user to claim a device or release a device.
+Allow the user to claim a device as his/her own.
 
-## User Device overview
+A device can be claimed by sending an **HTTP PATCH** to the `/devices/{id}/claim` route. The `{id}` should be the `id` of an existing device. No body data should be sent with the request. The device will be assigned to the current logged in user.
 
-A user should be able to view only his/her devices.
+For example:
+
+```text
+PATCH http://localhost:8081/devices/2/claim
+```
+
+Response of the backend **(200 OK)**:
+
+```json
+{
+  "id": 2,
+  "name": "Telraam",
+  "type": "Raspberry Pi",
+  "description": "Counts the number of people passing by",
+  "location": "2.85",
+  "image": "https://www.radiozuidrand.be/wp-content/uploads/2019/10/header-image-2.jpg",
+  "hostname": "telraam",
+  "createdAt": "2020-11-18T14:15:08.000Z",
+  "updatedAt": "2020-12-02T19:40:29.000Z",
+  "User": {
+    "id": 2,
+    "firstname": "Nico",
+    "lastname": "De Witte"
+  },
+  "DeviceInterfaces": [
+    {
+      "id": 2,
+      "mac": "11:BB:CC:DD:EE:FF"
+    }
+  ],
+  "IPReports": [
+    {
+      "id": 3,
+      "ip": "168.23.32.1",
+      "mac": "11:BB:CC:DD:EE:FF",
+      "DeviceId": 2,
+      "createdAt": "2020-11-18T14:15:08.000Z",
+      "updatedAt": "2020-11-18T14:15:08.000Z"
+    }
+  ]
+}
+```
+
+## Releasing Devices
+
+Allow the user to release a device as his/her own.
+
+A device can be released by sending an **HTTP PATCH** to the `/devices/{id}/release` route. The `{id}` should be the `id` of an existing device. No body data should be sent with the request. The current user will be removed as the owner of the device.
+
+For example:
+
+```text
+PATCH http://localhost:8081/devices/2/release
+```
+
+Response of the backend **(200 OK)**:
+
+```json
+{
+  "id": 2,
+  "name": "Telraam",
+  "type": "Raspberry Pi",
+  "description": "Counts the number of people passing by",
+  "location": "2.85",
+  "image": "https://www.radiozuidrand.be/wp-content/uploads/2019/10/header-image-2.jpg",
+  "hostname": "telraam",
+  "createdAt": "2020-11-18T14:15:08.000Z",
+  "updatedAt": "2020-12-02T19:43:53.000Z",
+  "User": null,
+  "DeviceInterfaces": [
+    {
+      "id": 2,
+      "mac": "11:BB:CC:DD:EE:FF"
+    }
+  ],
+  "IPReports": [
+    {
+      "id": 3,
+      "ip": "168.23.32.1",
+      "mac": "11:BB:CC:DD:EE:FF",
+      "DeviceId": 2,
+      "createdAt": "2020-11-18T14:15:08.000Z",
+      "updatedAt": "2020-11-18T14:15:08.000Z"
+    }
+  ]
+}
+```
+
+## Device Overview
+
+A user should be able to view all devices in a device overview page. All devices can be retrieved using an **HTTP GET** request send to the route `http://localhost:8081/devices`.
+
+For example:
+
+```text
+GET http://localhost:8081/devices
+```
+
+Response of the backend **(200 OK)**:
+
+```json
+[
+  {
+    "id": 1,
+    "name": "WiFi Counter",
+    "type": "Raspberry Pi",
+    "image": "https://www.yetanotherblog.com/wp-content/uploads/2014/03/IMG_20140325_105251-300x267.jpg",
+    "User": {
+      "id": 1,
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "DeviceInterfaces": [
+      {
+        "id": 1,
+        "mac": "AA:BB:CC:DD:EE:FF"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Telraam",
+    "type": "Raspberry Pi",
+    "image": "https://www.radiozuidrand.be/wp-content/uploads/2019/10/header-image-2.jpg",
+    "User": null,
+    "DeviceInterfaces": [
+      {
+        "id": 2,
+        "mac": "11:BB:CC:DD:EE:FF"
+      }
+    ]
+  }
+]
+```
+
+## Device Details
+
+Allow a user to fetch the details of a device by for example clicking on a device component in the device overview. The device details can be fetched by sending an **HTTP GET** request to the route `http://localhost:8081/devices/{id}` where `{id}` is an existing device `id`.
+
+For example:
+
+```text
+GET http://localhost:8081/devices/3
+```
+
+Response of the backend **(200 OK)**:
+
+```json
+{
+  "id": 3,
+  "name": "Smartphone Nico",
+  "type": null,
+  "description": null,
+  "location": null,
+  "image": null,
+  "hostname": null,
+  "createdAt": "2020-11-18T14:44:25.000Z",
+  "updatedAt": "2020-11-18T14:44:25.000Z",
+  "User": null,
+  "DeviceInterfaces": [
+    {
+      "id": 3,
+      "mac": "ee:9f:ff:ab:44:55"
+    }
+  ],
+  "IPReports": [
+    {
+      "id": 13,
+      "ip": "10.0.0.2",
+      "mac": "ee:9f:ff:ab:44:55",
+      "DeviceId": 3,
+      "createdAt": "2020-12-02T19:39:26.000Z",
+      "updatedAt": "2020-12-02T19:39:26.000Z"
+    }
+  ]
+}
+```
+
+## Only Users Devices
+
+The frontend should allow the user to filter his/her own devices. Fetch all devices from the `http://localhost:8081/devices` route and filter based on the `User`.
+
+## Display Orphaned IP Reports
+
+IP Reports are the results of the DHCP detector and are delivered to the backend.
+
+Example of IP report:
+
+```json
+{
+  "time": "Wed Dec 2 19:39:25 UTC 2020",
+  "mac": "aa:bb:7a:ab:ab:ff",
+  "ip": "10.0.0.2",
+  "hostname": "unknown"
+}
+```
+
+When delivered to the backend the database is checked if the `mac` address is known as a existing device. If not, the IP report is considered orphaned (not attached to a device).
+
+Allow the user to view the orphaned IP reports.
+
+These can be fetched from the API by sending an **HTTP GET** request to the route `http://localhost:8081/ipreports/orphaned`
+
+For example:
+
+```text
+GET http://localhost:8081/ipreports/orphaned
+```
+
+Response of the backend **(200 OK)**:
+
+```json
+[
+  {
+    "id": 5,
+    "ip": "168.23.32.1",
+    "mac": "33:BB:CC:DD:EE:FF",
+    "DeviceId": null,
+    "createdAt": "2020-11-18T14:15:08.000Z",
+    "updatedAt": "2020-11-18T14:15:08.000Z"
+  },
+  {
+    "id": 4,
+    "ip": "168.23.32.1",
+    "mac": "22:BB:CC:DD:EE:FF",
+    "DeviceId": null,
+    "createdAt": "2020-11-18T14:15:08.000Z",
+    "updatedAt": "2020-11-18T14:15:08.000Z"
+  }
+]
+```
+
+## Creating Devices
+
+Allow the user of the frontend app to create new devices. This can be achieved by sending an **HTTP POST** request to the route `http://localhost:8081/devices`.
+
+Include the following data in the body of the request:
+
+```json
+{
+	"name": "Smartphone Nico",
+	"interfaces": [
+		{ "mac": "cc:33:7a:cc:ab:22" }
+	]
+}
+```
+
+Next to `name` and `interfaces`, you can also add `type`, `description`, `location`, `image` and `hostname`. All which are of type `string`.
+
+For example:
+
+```text
+POST http://localhost:8081/devices
+```
+
+With the following body data:
+
+```json
+{
+	"name": "Smartphone Nico",
+	"interfaces": [
+		{ "mac": "cc:dd:bb:aa:ab:ff" }
+	]
+}
+```
+
+Response of the backend **(201 CREATED)**:
+
+```json
+{
+  "id": 8,
+  "name": "Smartphone Nico",
+  "DeviceInterfaces": [
+    {
+      "id": 12,
+      "mac": "cc:dd:bb:aa:ab:ff",
+      "DeviceId": 8,
+      "updatedAt": "2020-11-18T14:44:25.581Z",
+      "createdAt": "2020-11-18T14:44:25.581Z"
+    }
+  ],
+  "updatedAt": "2020-11-18T14:44:25.508Z",
+  "createdAt": "2020-11-18T14:44:25.508Z"
+}
+```
