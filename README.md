@@ -353,3 +353,17 @@ Response of the backend **(201 CREATED)**:
   "createdAt": "2020-11-18T14:44:25.508Z"
 }
 ```
+
+## Attach to the Live Backend
+
+Before continuing to deploy the frontend to Netlify, you need to configure the API domain using environment variables. More info can be found at [https://cli.vuejs.org/guide/mode-and-env.html#example-staging-mode](https://cli.vuejs.org/guide/mode-and-env.html#example-staging-mode).
+
+The actual backend API is available at [http://api.mydevices.bioboost.dev](http://api.mydevices.bioboost.dev).
+
+![My Devices](./img/my-devices.png)
+
+Once your application is operational its time to deploy the app to Netlify.
+
+Follow this guide to deploy your app: [https://fofxacademy.com/deploy-your-vue-js-application-to-netlify-in-4-steps/](https://fofxacademy.com/deploy-your-vue-js-application-to-netlify-in-4-steps/).
+
+Make sure to set the build command to `npm run build`.
