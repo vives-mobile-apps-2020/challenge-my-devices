@@ -367,3 +367,7 @@ Once your application is operational its time to deploy the app to Netlify.
 Follow this guide to deploy your app: [https://fofxacademy.com/deploy-your-vue-js-application-to-netlify-in-4-steps/](https://fofxacademy.com/deploy-your-vue-js-application-to-netlify-in-4-steps/).
 
 Make sure to set the build command to `npm run build`.
+
+## README
+
+Make sure to document the project in your `README.md`.
